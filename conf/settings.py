@@ -54,12 +54,12 @@ INSTALLED_APPS = [
     'health_check.cache',
     'health_check.storage',
     'health_check.contrib.migrations',
-    'health_check.contrib.celery',              # requires celery
-    'health_check.contrib.celery_ping',         # requires celery
-    'health_check.contrib.psutil',              # disk and memory utilization; requires psutil
+    # 'health_check.contrib.celery',              # requires celery
+    # 'health_check.contrib.celery_ping',         # requires celery
+    # 'health_check.contrib.psutil',              # disk and memory utilization; requires psutil
     'health_check.contrib.s3boto3_storage',     # requires boto3 and S3BotoStorage backend
-    'health_check.contrib.rabbitmq',            # requires RabbitMQ broker
-    'health_check.contrib.redis',               # requires Redis broker
+    # 'health_check.contrib.rabbitmq',            # requires RabbitMQ broker
+    # 'health_check.contrib.redis',               # requires Redis broker
 
     #custom apps
     'apps.main',
@@ -143,7 +143,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 # S3 bucket configurations
 # the media storage configurations
-is_s3_enabled = eval(env('S3_ENABLED', default=False))
+is_s3_enabled = eval(env('S3_ENABLED'))
 if is_s3_enabled:
     DEFAULT_FILE_STORAGE = 'conf.storage_backends.MediaStorage'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
