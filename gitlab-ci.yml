@@ -1,0 +1,46 @@
+## This is to deploy Python webapp to AWS Elastic Beanstalk.
+
+# Define the following variables before initialize the deployment.
+# 1- AWS_ACCESS_KEY_ID
+# 2- AWS_SECRET_ACCESS_KEY
+# 3- AWS_DEFAULT_REGION
+# 4- AWS_APPLICATION_NAME
+# 5- AWS_ENVIRONMENT_NAME
+
+image: python:latest
+
+stages:
+  - deploy
+  - release
+
+before_script:
+  - pip install awscli
+  - pip install awsebcli
+  - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+  - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+  - aws configure set region $AWS_DEFAULT_REGION
+  # Initialize EB cli within application deployment
+  - eb init $AWS_APPLICATION_NAME --region $AWS_DEFAULT_REGION --platform "64bit Amazon Linux 2 v3.3.5 running Python 3.8"
+  # configure with specific environment
+  - eb use $AWS_ENVIRONMENT_NAME
+
+# deploy_prod:
+#   stage: deploy
+#   script:
+#     - eb deploy
+#   environment:
+#     name: prod
+#     url: https://example.com
+#   only: ['master']
+
+release_version:
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  stage: release
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - echo 'release job'
+  release:
+    name: 'Release $CI_COMMIT_TAG'
+    tag_name: '$CI_COMMIT_TAG'
+    description: './CHANGELOG.md'
