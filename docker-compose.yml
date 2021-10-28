@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  backend:
+    container_name: backend
+    volumes:
+      - static:/static
+      - media:/media
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./devops/envs/local.env
+    depends_on:
+      - db
+  nginx:
+    container_name: nginx
+    build: ./devops/nginx
+    volumes:
+      - static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+  db:
+    container_name: database
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - devops/postgres/db.env
+    ports:
+      - "5432:5432"
+
+volumes:
+  static:
+  media:
+  postgres_data:
