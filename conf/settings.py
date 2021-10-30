@@ -61,9 +61,38 @@ INSTALLED_APPS = [
     # 'health_check.contrib.rabbitmq',            # requires RabbitMQ broker
     # 'health_check.contrib.redis',               # requires Redis broker
 
+    # Rest framework with swagger
+    'drf_yasg',
+    'rest_framework',
+    'rest_framework_swagger',
+
     #custom apps
     'apps.main',
+    'apps.points',
 ]
+API_VERSION = env('API_VERSION')
+# Rest Framework
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
+    #     "rest_framework.authentication.SessionAuthentication",
+    #     "rest_framework.authentication.BasicAuthentication",
+    #     'rest_framework.schemas.coreapi.AutoSchema',
+    # ),
+    'DEFAULT_SCHEMA_CLASS': (
+        'rest_framework.schemas.coreapi.AutoSchema'
+    )
+}
+
+# JWT
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+#     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+#     "ROTATE_REFRESH_TOKENS": True,
+#     "BLACKLIST_AFTER_ROTATION": False,
+#     "SIGNING_KEY": SECRET_KEY,
+#     "AUTH_HEADER_TYPES": ('Bearer', 'JWT'),
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

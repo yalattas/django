@@ -15,10 +15,37 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+from django.conf import settings
+
+# To include current API version in the URL
+api = f'api/{settings.API_VERSION}'
+
+# for swagger documentation
+# schema_view = get_swagger_view(title='Pastebin API')
+schema_view = get_schema_view(
+    openapi.Info(
+        title="application API",
+        default_version="v1",
+        description="Here is a brief about the application",
+        terms_of_service="https://example.com/privacy-policy.html",
+        contact=openapi.Contact(email="username@domain.com"),
+        license=openapi.License(name="Commercial"),
+    ),
+    public=False,
+    # to restrict access to admin only
+    permission_classes=(permissions.IsAdminUser,),
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('health/', include('health_check.urls')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('docs/', schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
 
     path('', include('apps.main.urls')),
+    path(f'{api}/points/', include('apps.points.urls')),
 ]
