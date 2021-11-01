@@ -220,10 +220,11 @@ logger_session = Session(
     aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
     region_name=AWS_S3_REGION_NAME,
 )
-LOG_GROUP = "app-backend-prod-container-log"
-STREAM_NAME_INFO = "info.log"
+LOG_GROUP = env('LOG_GROUP')
+STREAM_NAME_INFO = env('STREAM_NAME_INFO')
 
-if DEBUG is False:
+CLOUDWATCH_ENABLED = eval(env('CLOUDWATCH_ENABLED'))
+if CLOUDWATCH_ENABLED:
     LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

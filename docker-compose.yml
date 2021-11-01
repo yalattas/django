@@ -3,8 +3,8 @@ services:
   backend:
     container_name: backend
     volumes:
-      - static:/static
-      - media:/media
+      - static:/app/static
+      - media:/app/media
     build: .
     ports:
       - "8000:8000"
@@ -16,7 +16,8 @@ services:
     container_name: nginx
     build: ./devops/nginx
     volumes:
-      - static:/static
+      - static:/app/static
+      - media:/app/media
     ports:
       - "80:80"
     depends_on:
@@ -30,6 +31,10 @@ services:
       - devops/postgres/db.env
     ports:
       - "5432:5432"
+
+networks:
+  default:
+    name: app_custom_network
 
 volumes:
   static:
